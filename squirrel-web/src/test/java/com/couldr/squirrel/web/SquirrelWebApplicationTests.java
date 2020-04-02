@@ -1,4 +1,4 @@
-package com.couldr.squirrel.squirrelweb;
+package com.couldr.squirrel.web;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
