@@ -59,7 +59,6 @@ public class LocalCache implements CacheStore<String,Object>{
 
       return null;
     }
-
     return (T) wrapper.getValue();
   }
 
@@ -82,16 +81,16 @@ public class LocalCache implements CacheStore<String,Object>{
     return CACHE_CONTAINER.containsKey(key);
   }
 
-  private static class CacheWrapper {
+  private static class CacheWrapper<V> {
     private Date date;
-    private Object value;
+    private V value;
 
-    public CacheWrapper(int time, Object value) {
+    public CacheWrapper(int time, V value) {
       this.date = new Date(System.currentTimeMillis() + time * 1000);
       this.value = value;
     }
 
-    public CacheWrapper(Object value) {
+    public CacheWrapper(V value) {
       this.value = value;
     }
 

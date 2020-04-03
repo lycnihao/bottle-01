@@ -6,6 +6,7 @@ import com.couldr.squirrel.code.exception.BadRequestException;
 import com.couldr.squirrel.code.exception.NotFoundException;
 import com.couldr.squirrel.code.model.entity.User;
 import com.couldr.squirrel.code.security.AuthToken;
+import com.couldr.squirrel.code.security.util.SecurityUtils;
 import com.couldr.squirrel.code.service.AdminService;
 import com.couldr.squirrel.code.service.UserService;
 import com.couldr.squirrel.code.utils.SquirrelUtils;
@@ -28,7 +29,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public AuthToken authenticate(String username, String password) {
-        System.out.println(username);
         String mismatchTip = "用户名或者密码不正确";
 
         final User user;
@@ -69,14 +69,15 @@ public class AdminServiceImpl implements AdminService {
         token.setExpiredIn(ACCESS_TOKEN_EXPIRED_SECONDS);
         token.setRefreshToken(SquirrelUtils.randomUUIDWithoutDash());
 
-/*        // Cache those tokens, just for clearing
+        // Cache those tokens, just for clearing
         localCache.put(SecurityUtils.buildAccessTokenKey(user), token.getAccessToken(), ACCESS_TOKEN_EXPIRED_SECONDS);
-        localCache.put((SecurityUtils.buildRefreshTokenKey(user), token.getRefreshToken(), REFRESH_TOKEN_EXPIRED_DAYS);
+        localCache.put(SecurityUtils.buildRefreshTokenKey(user), token.getRefreshToken(), REFRESH_TOKEN_EXPIRED_DAYS);
 
         // Cache those tokens with user id
-        localCache.put((SecurityUtils.buildTokenAccessKey(token.getAccessToken()), user.getId(), ACCESS_TOKEN_EXPIRED_SECONDS);
-        localCache.put((SecurityUtils.buildTokenRefreshKey(token.getRefreshToken()), user.getId(), REFRESH_TOKEN_EXPIRED_DAYS);*/
-
+        localCache.put(SecurityUtils.buildTokenAccessKey(token.getAccessToken()), user.getId(), ACCESS_TOKEN_EXPIRED_SECONDS);
+        localCache.put(SecurityUtils.buildTokenRefreshKey(token.getRefreshToken()), user.getId(), REFRESH_TOKEN_EXPIRED_DAYS);
+        Object object = localCache.get(SecurityUtils.buildTokenAccessKey(token.getAccessToken()));
+        System.out.println(object.toString());
         return token;
     }
 }
