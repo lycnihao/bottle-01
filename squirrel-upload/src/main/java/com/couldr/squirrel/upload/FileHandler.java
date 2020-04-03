@@ -28,9 +28,9 @@ public interface FileHandler {
 
     /**
      * 删除文件
-     * @param key 文件key
+     * @param path 文件路径
      */
-    void delete(String key);
+    void delete(String path);
 
     String getPrefix(String fileName);
 

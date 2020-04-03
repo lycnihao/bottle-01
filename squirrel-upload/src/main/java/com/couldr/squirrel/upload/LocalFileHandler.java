@@ -1,9 +1,11 @@
 package com.couldr.squirrel.upload;
 
+import com.couldr.squirrel.code.exception.FileOperationException;
 import com.couldr.squirrel.code.exception.ServiceException;
 import com.couldr.squirrel.code.model.support.UploadResult;
 import com.couldr.squirrel.code.utils.SquirrelUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -98,6 +100,13 @@ public class LocalFileHandler implements FileHandler {
 
     @Override
     public void delete(String key) {
+        Assert.hasText(key, "文件路径不能为空");
+        Path path = Paths.get(workDir, key);
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            throw new FileOperationException("附件 " + key + " 删除失败", e);
+        }
 
     }
 

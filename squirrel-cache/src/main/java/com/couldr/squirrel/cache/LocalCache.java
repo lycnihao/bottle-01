@@ -1,5 +1,7 @@
 package com.couldr.squirrel.cache;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Iksen
  * @date 2020-04-03 15:30
  */
+@Component
 public class LocalCache implements CacheStore<String,Object>{
 
   private static final ConcurrentHashMap<String, Object> CACHE_CONTAINER = new ConcurrentHashMap<String, Object>();

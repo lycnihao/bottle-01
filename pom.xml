@@ -19,7 +19,6 @@
 
     <!-- 注意：子模块 -->
     <modules>
-        <module>squirrel-web</module>
         <module>squirrel-code</module>
         <module>squirrel-upload</module>
         <module>squirrel-cache</module>

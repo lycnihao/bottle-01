@@ -11,10 +11,15 @@
 
     <artifactId>squirrel-code</artifactId>
     <name>squirrel-code</name>
+    <packaging>jar</packaging>
     <description>Demo project for Spring Boot</description>
 
     <dependencies>
-        
+        <dependency>
+            <groupId>com.couldr</groupId>
+            <artifactId>squirrel-cache</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
