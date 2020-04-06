@@ -14,7 +14,6 @@ import org.springframework.lang.Nullable;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
-@AllArgsConstructor
 public class BaseResponse<T> {
 
     /**
@@ -26,11 +25,6 @@ public class BaseResponse<T> {
      * Response message.
      */
     private String message;
-
-    /**
-     * Response development message
-     */
-    private String devMessage;
 
     /**
      * Response data

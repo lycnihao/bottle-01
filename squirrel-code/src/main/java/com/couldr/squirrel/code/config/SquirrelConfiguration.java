@@ -11,13 +11,13 @@ import org.springframework.core.Ordered;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 /**
- * Couldr configuration.
+ * Squirrel configuration.
  *
  * @author iksen
  */
 @Configuration
 @Slf4j
-public class CouldrConfiguration {
+public class SquirrelConfiguration {
 
     @Bean
     public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
