@@ -1,7 +1,6 @@
 package com.couldr.squirrel.code.model.dto;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
@@ -13,9 +12,12 @@ import lombok.ToString;
 @Data
 @ToString
 public class FolderOrFileDTO {
+  private Integer id;
   private String key;
   private String name;
   private String suffix;
   private Long size;
   private Boolean isFolder;
+  private Integer parent;
+  private String path;
 }

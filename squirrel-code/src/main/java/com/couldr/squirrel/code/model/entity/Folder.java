@@ -1,14 +1,10 @@
 package com.couldr.squirrel.code.model.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import javax.persistence.*;
 
 /**
  * 文件夹
@@ -38,4 +34,10 @@ public class Folder extends BaseEntity{
    */
   @Column(name = "pid")
   private Integer pid;
+
+  /**
+   * 路径
+   */
+  @Column(name = "path")
+  private String path;
 }
