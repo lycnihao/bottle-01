@@ -45,7 +45,6 @@ public class AdminServiceImpl implements AdminService {
 
         if (!userService.passwordMatch(user, password)) {
             // If the password is mismatch
-            System.out.println("账号或密码不匹配");
             throw new BadRequestException(mismatchTip);
         }
         System.out.println("登录成功");
@@ -76,8 +75,6 @@ public class AdminServiceImpl implements AdminService {
         // Cache those tokens with user id
         localCache.put(SecurityUtils.buildTokenAccessKey(token.getAccessToken()), user.getId(), ACCESS_TOKEN_EXPIRED_SECONDS);
         localCache.put(SecurityUtils.buildTokenRefreshKey(token.getRefreshToken()), user.getId(), REFRESH_TOKEN_EXPIRED_DAYS);
-        Object object = localCache.get(SecurityUtils.buildTokenAccessKey(token.getAccessToken()));
-        System.out.println(object.toString());
         return token;
     }
 }

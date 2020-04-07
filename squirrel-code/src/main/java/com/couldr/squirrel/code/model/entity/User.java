@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * User entity
+ * 用户实体类
  *
  * @author liyuancheng
  * @date 2020-03-17

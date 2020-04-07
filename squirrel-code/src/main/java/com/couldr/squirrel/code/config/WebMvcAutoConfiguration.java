@@ -28,6 +28,8 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(adminAuthenticationInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/api/admin/login");
+                .addPathPatterns("/api/**")
+                .excludePathPatterns("/api/admin/login")
+                .excludePathPatterns("/error");
     }
 }
