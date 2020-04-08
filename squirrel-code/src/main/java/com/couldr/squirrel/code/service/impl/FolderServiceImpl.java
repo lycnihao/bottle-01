@@ -58,5 +58,15 @@ public class FolderServiceImpl extends AbstractCrudService<Folder, Integer> impl
     return folderOrFileDTOS;
   }
 
+  @Override
+  public Folder rename(String name, String key) {
+    Folder folder = super.getById(Integer.valueOf(key));
+    String path = folder.getPath();
+    folder.setPath(path.substring(0, path.lastIndexOf(folder.getName())) + name);
+    folder.setName(name);
+    super.update(folder);
+    return folder;
+  }
+
 
 }

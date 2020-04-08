@@ -40,4 +40,9 @@ public class Folder extends BaseEntity{
    */
   @Column(name = "path")
   private String path;
+
+  @Override
+  protected void prePersist() {
+    super.prePersist();
+  }
 }

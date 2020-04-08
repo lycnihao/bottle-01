@@ -29,4 +29,6 @@ public interface FolderService extends CrudService<Folder, Integer> {
   List<Folder> getByPathLike(String path);
 
   List<FolderOrFileDTO> convertToDto (List<Folder> folders);
+
+  Folder rename(String name,String key);
 }
