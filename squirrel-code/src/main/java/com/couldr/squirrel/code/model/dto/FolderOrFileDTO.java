@@ -16,6 +16,7 @@ public class FolderOrFileDTO {
   private String key;
   private String name;
   private String suffix;
+  private String mediaType;
   private Long size;
   private Boolean isFolder;
   private Integer parent;

@@ -1,13 +1,9 @@
 package com.couldr.squirrel.upload;
 
-import static com.couldr.squirrel.upload.model.FileConst.DELIMITER;
-import static com.couldr.squirrel.upload.model.FileConst.USER_HOME;
-
 import com.couldr.squirrel.upload.exception.FileOperationException;
 import com.couldr.squirrel.upload.exception.ServiceException;
 import com.couldr.squirrel.upload.model.UploadResult;
 import com.couldr.squirrel.upload.utils.SquirrelUtils;
-import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -21,6 +17,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
+
+import static com.couldr.squirrel.upload.model.FileConst.DELIMITER;
+import static com.couldr.squirrel.upload.model.FileConst.USER_HOME;
 
 /**
  * 本地文件上传程序
@@ -55,7 +55,7 @@ public class LocalFileHandler implements FileHandler {
 
         String subDir = UPLOAD_DIR + year + DELIMITER + month + DELIMITER;
         //文件名称
-        String basename = getPrefix(file.getOriginalFilename());
+        String basename = getPrefix(Objects.requireNonNull(file.getOriginalFilename()));
         String extension =  basename + "_" + key;
         String suffix = getSuffix(file.getOriginalFilename());
         String subFilePath = subDir + extension + '.' + suffix;
@@ -68,7 +68,7 @@ public class LocalFileHandler implements FileHandler {
             // 上传文件
             file.transferTo(uploadPath);
             UploadResult uploadResult = new UploadResult();
-            uploadResult.setFilename(extension);
+            uploadResult.setFilename(extension + '.' + suffix);
             uploadResult.setFilePath(subFilePath);
             uploadResult.setKey(key);
             uploadResult.setSuffix(suffix);

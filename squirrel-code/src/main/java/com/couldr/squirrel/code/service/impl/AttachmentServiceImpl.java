@@ -7,7 +7,6 @@ import com.couldr.squirrel.code.service.AttachmentService;
 import com.couldr.squirrel.code.service.base.AbstractCrudService;
 import com.couldr.squirrel.upload.FileHandler;
 import com.couldr.squirrel.upload.model.UploadResult;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,7 +38,7 @@ public class AttachmentServiceImpl extends AbstractCrudService<Attachment, Integ
     UploadResult uploadResult = fileHandler.upload(file);
     Attachment attachment = convertToBean(uploadResult);
     System.out.println(attachment);
-    return attachment;
+    return create(attachment);
   }
 
   @Override
@@ -54,4 +53,5 @@ public class AttachmentServiceImpl extends AbstractCrudService<Attachment, Integ
     attachment.setSize(uploadResult.getSize());
     return attachment;
   }
+
 }
