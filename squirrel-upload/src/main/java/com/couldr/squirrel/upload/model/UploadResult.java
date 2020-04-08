@@ -1,4 +1,4 @@
-package com.couldr.squirrel.code.model.support;
+package com.couldr.squirrel.upload.model;
 
 import lombok.Data;
 import lombok.ToString;

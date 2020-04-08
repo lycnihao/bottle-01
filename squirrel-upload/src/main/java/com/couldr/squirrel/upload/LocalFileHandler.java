@@ -1,10 +1,16 @@
 package com.couldr.squirrel.upload;
 
-import com.couldr.squirrel.code.exception.FileOperationException;
-import com.couldr.squirrel.code.exception.ServiceException;
-import com.couldr.squirrel.code.model.support.UploadResult;
-import com.couldr.squirrel.code.utils.SquirrelUtils;
+import static com.couldr.squirrel.upload.model.FileConst.DELIMITER;
+import static com.couldr.squirrel.upload.model.FileConst.USER_HOME;
+
+import com.couldr.squirrel.upload.exception.FileOperationException;
+import com.couldr.squirrel.upload.exception.ServiceException;
+import com.couldr.squirrel.upload.model.UploadResult;
+import com.couldr.squirrel.upload.utils.SquirrelUtils;
+import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,14 +22,12 @@ import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Locale;
 
-import static com.couldr.squirrel.code.model.support.SquirrelConst.DELIMITER;
-import static com.couldr.squirrel.code.model.support.SquirrelConst.USER_HOME;
-
 /**
  * 本地文件上传程序
  * @Author: iksen
  * @Date: 2020/4/2 20:11
  */
+@Component
 public class LocalFileHandler implements FileHandler {
 
     /**
@@ -51,9 +55,9 @@ public class LocalFileHandler implements FileHandler {
 
         String subDir = UPLOAD_DIR + year + DELIMITER + month + DELIMITER;
         //文件名称
-        String basename = getPrefix(file.getName());
+        String basename = getPrefix(file.getOriginalFilename());
         String extension =  basename + "_" + key;
-        String suffix = getSuffix(file.getName());
+        String suffix = getSuffix(file.getOriginalFilename());
         String subFilePath = subDir + extension + '.' + suffix;
         System.out.println(subFilePath);
         Path uploadPath = Paths.get(workDir, subFilePath);
@@ -68,7 +72,7 @@ public class LocalFileHandler implements FileHandler {
             uploadResult.setFilePath(subFilePath);
             uploadResult.setKey(key);
             uploadResult.setSuffix(suffix);
-            /*uploadResult.setMediaType(MediaType.valueOf(Objects.requireNonNull(file.getContentType())));*/
+            uploadResult.setMediaType(MediaType.valueOf(Objects.requireNonNull(file.getContentType())));
             uploadResult.setSize(file.getSize());
             return uploadResult;
         } catch (IOException e) {

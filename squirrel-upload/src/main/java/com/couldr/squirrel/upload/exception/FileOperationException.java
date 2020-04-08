@@ -1,4 +1,4 @@
-package com.couldr.squirrel.code.exception;
+package com.couldr.squirrel.upload.exception;
 
 /**
  * 文件操作异常

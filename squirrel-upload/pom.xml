@@ -15,11 +15,7 @@
     <description>Demo project for Spring Boot</description>
 
     <dependencies>
-        <dependency>
-            <groupId>com.couldr</groupId>
-            <artifactId>squirrel-code</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
+
     </dependencies>
 
     <build>

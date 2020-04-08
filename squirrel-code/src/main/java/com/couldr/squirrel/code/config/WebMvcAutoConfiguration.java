@@ -30,7 +30,7 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .addPathPatterns("/api/**")
                 .excludePathPatterns("/api/admin/login")
-                .excludePathPatterns("/error").excludePathPatterns("/api/admin/folder");
+                .excludePathPatterns("/error").excludePathPatterns("/api/admin/folder/upload");
 
     }
 }

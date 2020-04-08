@@ -2,12 +2,13 @@ package com.couldr.squirrel.code.service.impl;
 
 import com.couldr.squirrel.code.model.entity.Attachment;
 import com.couldr.squirrel.code.model.enums.AttachmentType;
-import com.couldr.squirrel.code.model.support.UploadResult;
 import com.couldr.squirrel.code.repository.AttachmentRepository;
 import com.couldr.squirrel.code.service.AttachmentService;
 import com.couldr.squirrel.code.service.base.AbstractCrudService;
 import com.couldr.squirrel.upload.FileHandler;
+import com.couldr.squirrel.upload.model.UploadResult;
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author LiYuanCheng
  * @date 2020-04-08 10:39
  */
+@Service
 public class AttachmentServiceImpl extends AbstractCrudService<Attachment, Integer> implements AttachmentService {
 
   private final AttachmentRepository attachmentRepository;
@@ -43,7 +45,13 @@ public class AttachmentServiceImpl extends AbstractCrudService<Attachment, Integ
   @Override
   public Attachment convertToBean(UploadResult uploadResult) {
     Attachment attachment = new Attachment();
-    BeanUtils.copyProperties(uploadResult,attachment);
+    attachment.setFileKey(uploadResult.getKey());
+    attachment.setName(uploadResult.getFilename());
+    attachment.setPath(uploadResult.getFilePath());
+    attachment.setSuffix(uploadResult.getSuffix());
+    attachment.setMediaType(uploadResult.getMediaType().toString());
+    attachment.setType(AttachmentType.LOCAL);
+    attachment.setSize(uploadResult.getSize());
     return attachment;
   }
 }

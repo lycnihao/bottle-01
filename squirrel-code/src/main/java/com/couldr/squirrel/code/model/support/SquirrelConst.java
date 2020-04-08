@@ -12,15 +12,6 @@ import java.time.Duration;
  */
 public class SquirrelConst {
 
-    /**
-     * 用户主目录
-     */
-    public final static String USER_HOME = System.getProperties().getProperty("user.home");
-
-    /**
-     * 临时目录
-     */
-    public final static String TEMP_DIR = System.getProperties().getProperty("java.io.tmpdir");
 
     /**
      * token标识名称

@@ -1,6 +1,6 @@
 package com.couldr.squirrel.upload;
 
-import com.couldr.squirrel.code.model.support.UploadResult;
+import com.couldr.squirrel.upload.model.UploadResult;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
  * @Date: 2020/4/2 19:47
  */
 public interface FileHandler {
-
 
     /**
      * 上传文件
