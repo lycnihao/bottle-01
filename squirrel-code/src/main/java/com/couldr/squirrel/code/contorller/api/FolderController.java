@@ -74,6 +74,11 @@ public class FolderController {
       } else
       if (isFolder) {
         folderService.rename(name,key);
+      } else {
+        Attachment attachment = attachmentService.getByKey(key);
+        attachment.setName(name);
+        attachment.setPath(attachmentService.move(attachment.getPath(),path + SquirrelConst.DELIMITER + name));
+        attachmentService.update(attachment);
       }
 
     return BaseResponse.ok("");
@@ -84,6 +89,8 @@ public class FolderController {
       @RequestParam(value = "isFolder", defaultValue = "true") Boolean isFolder){
     if (isFolder) {
       folderService.removeById(Integer.valueOf(key));
+    } else {
+      attachmentService.removePermanently(key);
     }
     return BaseResponse.ok("");
   }
@@ -91,7 +98,7 @@ public class FolderController {
   @PostMapping("upload")
   public Attachment uploadAttachment(@RequestPart("file") MultipartFile file, @RequestParam(defaultValue = "root") String path){
     Folder folder = folderService.getByPath(path);
-    Attachment attachment = attachmentService.upload(file);
+    Attachment attachment = attachmentService.upload(file,path);
     FolderAttachment folderAttachment = new FolderAttachment();
     folderAttachment.setAttachmentId(attachment.getId());
     folderAttachment.setFolderId(folder.getId());

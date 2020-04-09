@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface AttachmentRepository extends BaseRepository<Attachment, Integer>,
     JpaSpecificationExecutor<Attachment> {
-
+    Attachment getByFileKey(String key);
 }

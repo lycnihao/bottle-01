@@ -21,7 +21,7 @@ public class UploadTest {
             File file = new File("C:\\Users\\38707\\.squirrel\\upload\\2020\\4\\123.jpg");
             FileInputStream fileInputStream = new FileInputStream(file);
             MockMultipartFile mockMultipartFile = new MockMultipartFile(file.getName(),fileInputStream);
-            fileHandler.upload(mockMultipartFile);
+            fileHandler.upload(mockMultipartFile,"/test/");
         } catch (IOException e) {
             e.printStackTrace();
         }

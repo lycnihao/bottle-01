@@ -43,22 +43,26 @@ public class LocalFileHandler implements FileHandler {
     }
 
     @Override
-    public UploadResult upload(MultipartFile file) {
+    public UploadResult upload(MultipartFile file, String path) {
         //获取当前时间
         Calendar current = Calendar.getInstance(Locale.getDefault());
 
         //获取年，月份
-        int year = current.get(Calendar.YEAR);
+        /*int year = current.get(Calendar.YEAR);
         int month = current.get(Calendar.MONTH) + 1;
+
+        String subDir = UPLOAD_DIR + year + DELIMITER + month + DELIMITER;*/
+
+        String subDir =  path + DELIMITER;
 
         String key = SquirrelUtils.randomUUIDWithoutDash();
 
-        String subDir = UPLOAD_DIR + year + DELIMITER + month + DELIMITER;
+
         //文件名称
         String basename = getPrefix(Objects.requireNonNull(file.getOriginalFilename()));
         String extension =  basename + "_" + key;
         String suffix = getSuffix(file.getOriginalFilename());
-        String subFilePath = subDir + extension + '.' + suffix;
+        String subFilePath =  UPLOAD_DIR + subDir + extension + '.' + suffix;
         System.out.println(subFilePath);
         Path uploadPath = Paths.get(workDir, subFilePath);
         try {
@@ -82,13 +86,12 @@ public class LocalFileHandler implements FileHandler {
     }
 
     @Override
-    public void moveToPath(String key, String path) {
+    public String moveToPath(String path, String newPath) {
+        String subDir = UPLOAD_DIR + newPath;
            try {
-               String filePath = "C:\\Users\\38707\\.squirrel\\upload\\2020\\4\\123.jpg";
-               File oldFile = new File(filePath);
-               String subDir = workDir + UPLOAD_DIR + path + DELIMITER;
-               Path uploadPath = Paths.get(subDir, oldFile.getName());
-               File newFile = new File(uploadPath.toString());
+               File oldFile = new File(workDir + path);
+               Path uploadPath = Paths.get(subDir);
+               File newFile = new File(workDir + uploadPath.toString());
                //创建文件夹
                Files.createDirectories(uploadPath.getParent());
                if (oldFile.renameTo(newFile)){
@@ -99,7 +102,7 @@ public class LocalFileHandler implements FileHandler {
            } catch (IOException e){
                e.printStackTrace();
            }
-
+        return subDir;
     }
 
     @Override

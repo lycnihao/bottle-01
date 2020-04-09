@@ -6,7 +6,14 @@ import com.couldr.squirrel.upload.model.UploadResult;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface AttachmentService extends CrudService<Attachment, Integer> {
-  Attachment upload(MultipartFile file);
+
+  Attachment getByKey(String key);
+
+  Attachment upload(MultipartFile file,String path);
+
+  String move(String path,String newPath);
+
+  Attachment removePermanently(String  key);
 
   Attachment convertToBean(UploadResult uploadResult);
 }

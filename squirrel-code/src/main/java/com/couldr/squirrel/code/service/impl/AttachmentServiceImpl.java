@@ -32,13 +32,31 @@ public class AttachmentServiceImpl extends AbstractCrudService<Attachment, Integ
   }
 
   @Override
-  public Attachment upload(MultipartFile file) {
+  public Attachment getByKey(String key) {
+    return attachmentRepository.getByFileKey(key);
+  }
+
+  @Override
+  public Attachment upload(MultipartFile file, String path) {
     Assert.notNull(file, "文件不能为空");
 
-    UploadResult uploadResult = fileHandler.upload(file);
+    UploadResult uploadResult = fileHandler.upload(file,path);
     Attachment attachment = convertToBean(uploadResult);
     System.out.println(attachment);
     return create(attachment);
+  }
+
+  @Override
+  public String move(String path, String newPath) {
+    return fileHandler.moveToPath(path,newPath);
+  }
+
+  @Override
+  public Attachment removePermanently(String  key) {
+    Attachment deletedAttachment = attachmentRepository.getByFileKey(key);
+    remove(deletedAttachment);
+    fileHandler.delete(deletedAttachment.getPath());
+    return deletedAttachment;
   }
 
   @Override

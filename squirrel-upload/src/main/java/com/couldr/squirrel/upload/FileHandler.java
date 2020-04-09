@@ -16,14 +16,14 @@ public interface FileHandler {
      * @param file 文件
      * @return
      */
-    UploadResult upload(MultipartFile file);
+    UploadResult upload(MultipartFile file, String path);
 
     /**
      * 移动文件
-     * @param key 文件key
      * @param path 移动路径
+     * @param newPath 移动路径
      */
-    void moveToPath(String key,String path);
+    String moveToPath(String path,String newPath);
 
     /**
      * 删除文件
