@@ -86,23 +86,33 @@ public class LocalFileHandler implements FileHandler {
     }
 
     @Override
-    public String moveToPath(String path, String newPath) {
+    public UploadResult moveToPath(String path, String newPath) {
         String subDir = UPLOAD_DIR + newPath;
            try {
                File oldFile = new File(workDir + path);
                Path uploadPath = Paths.get(subDir);
                File newFile = new File(workDir + uploadPath.toString());
+               System.out.println(workDir + path);
+               System.out.println(workDir + uploadPath.toString());
                //创建文件夹
                Files.createDirectories(uploadPath.getParent());
                if (oldFile.renameTo(newFile)){
+                   UploadResult uploadResult = new UploadResult();
+                   uploadResult.setFilename(newFile.getName());
+                   uploadResult.setFilePath(uploadPath.toString());
+                   uploadResult.setSuffix(getSuffix(newFile.getName()));
+                   uploadResult.setMediaType(MediaType.valueOf(Files.probeContentType(Paths.get(workDir,uploadPath.toString()))));
+                   uploadResult.setSize(newFile.length());
+                   System.out.println(uploadResult);
                    System.out.println("File is moved successful!");
+                   return uploadResult;
                } else {
                    System.out.println("File is failed to move !");
                }
            } catch (IOException e){
                e.printStackTrace();
            }
-        return subDir;
+        return null;
     }
 
     @Override

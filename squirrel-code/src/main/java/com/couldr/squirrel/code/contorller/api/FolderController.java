@@ -10,12 +10,16 @@ import com.couldr.squirrel.code.model.support.SquirrelConst;
 import com.couldr.squirrel.code.service.AttachmentService;
 import com.couldr.squirrel.code.service.FolderAttachmentService;
 import com.couldr.squirrel.code.service.FolderService;
+import com.couldr.squirrel.upload.model.UploadResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -75,10 +79,16 @@ public class FolderController {
       if (isFolder) {
         folderService.rename(name,key);
       } else {
+        String newPath = path + SquirrelConst.DELIMITER + name;
         Attachment attachment = attachmentService.getByKey(key);
-        attachment.setName(name);
-        attachment.setPath(attachmentService.move(attachment.getPath(),path + SquirrelConst.DELIMITER + name));
-        attachmentService.update(attachment);
+        UploadResult uploadResult = attachmentService.move(attachment.getPath(),newPath);
+        if (uploadResult != null){
+          attachment.setName(name);
+          attachment.setPath(uploadResult.getFilePath());
+          attachment.setSuffix(uploadResult.getSuffix());
+          attachment.setMediaType(uploadResult.getMediaType().toString());
+          attachmentService.update(attachment);
+        }
       }
 
     return BaseResponse.ok("");

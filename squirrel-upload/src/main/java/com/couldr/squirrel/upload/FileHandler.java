@@ -23,7 +23,7 @@ public interface FileHandler {
      * @param path 移动路径
      * @param newPath 移动路径
      */
-    String moveToPath(String path,String newPath);
+    UploadResult moveToPath(String path,String newPath);
 
     /**
      * 删除文件
