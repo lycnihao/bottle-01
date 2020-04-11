@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.couldr</groupId>
-    <artifactId>squirrel</artifactId>
+    <groupId>run.bottle</groupId>
+    <artifactId>bottle</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>squirrel</name>
+    <name>bottle</name>
     <description>Demo project for Spring Boot</description>
 
     <parent>
@@ -19,9 +19,9 @@
 
     <!-- 注意：子模块 -->
     <modules>
-        <module>squirrel-code</module>
-        <module>squirrel-upload</module>
-        <module>squirrel-cache</module>
+        <module>bottle-code</module>
+        <module>bottle-upload</module>
+        <module>bottle-cache</module>
     </modules>
 
     <properties>
