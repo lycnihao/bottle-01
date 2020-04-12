@@ -1,0 +1,56 @@
+server:
+  port: 8090
+  forward-headers-strategy: native
+  compression:
+    enabled: false
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  devtools:
+    add-properties: false
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+
+    # H2 database configuration.
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:~/.squirrel/db/couldr
+    username: admin
+    password: 123456
+
+  h2:
+    console:
+      settings:
+        web-allow-others: false
+      path: /h2-console
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+  freemarker:
+    allow-request-override: false
+    cache: false
+    check-template-location: true
+    charset: utf-8
+    content-type: text/html
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: true
+    suffix: .ftl
+    settings:
+      auto_import: /spring.ftl as spring
+  servlet:
+    multipart:
+      max-file-size: 10240MB
+      max-request-size: 10240MB
+      location: ${java.io.tmpdir}
+
+logging:
+  level:
+    com.couldr.app: INFO
+  file:
+    path: ${user.home}/.squirrel/logs
