@@ -16,7 +16,7 @@ spring:
 
     # H2 database configuration.
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:~/.squirrel/db/couldr
+    url: jdbc:h2:file:~/.bottle/db/couldr
     username: admin
     password: 123456
 
@@ -53,4 +53,4 @@ logging:
   level:
     com.couldr.app: INFO
   file:
-    path: ${user.home}/.squirrel/logs
+    path: ${user.home}/.bottle/logs

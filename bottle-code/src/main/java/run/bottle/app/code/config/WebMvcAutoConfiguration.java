@@ -44,7 +44,7 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-        String workDir = USER_HOME + DELIMITER + ".squirrel" + DELIMITER;
+        String workDir = USER_HOME + DELIMITER + ".bottle" + DELIMITER;
 
         registry.addResourceHandler("upload/**")
                 .addResourceLocations(FILE_PROTOCOL + workDir + "upload/");

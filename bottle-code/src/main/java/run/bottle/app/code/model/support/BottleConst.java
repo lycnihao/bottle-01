@@ -27,9 +27,9 @@ public class BottleConst {
     public static String ADMIN_SESSION_KEY = "admin_session";
 
     /**
-     * Squirrel Path.
+     * Bottle Path.
      */
-    public static final String Squirrel_PATH = "http://192.168.127.1:8090";
+    public static final String BOTTLE_PATH = "http://localhost:8090";
 
     /**
      * 路径分隔符

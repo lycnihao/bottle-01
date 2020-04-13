@@ -1,10 +1,12 @@
 package run.bottle.app.upload;
 
+import static run.bottle.app.upload.utils.BottleFileUtils.getPrefix;
+import static run.bottle.app.upload.utils.BottleFileUtils.getSuffix;
+
 import run.bottle.app.upload.exception.FileOperationException;
 import run.bottle.app.upload.exception.ServiceException;
 import run.bottle.app.upload.model.UploadResult;
-import run.bottle.app.upload.utils.SquirrelUtils;
-import org.apache.commons.lang3.StringUtils;
+import run.bottle.app.upload.utils.BottleFileUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -37,7 +39,7 @@ public class LocalFileHandler implements FileHandler {
 
     public LocalFileHandler() {
         // Get work dir
-        workDir = FileConst.USER_HOME + FileConst.DELIMITER + ".squirrel" + FileConst.DELIMITER;
+        workDir = FileConst.USER_HOME + FileConst.DELIMITER + ".bottle" + FileConst.DELIMITER;
     }
 
     @Override
@@ -53,7 +55,7 @@ public class LocalFileHandler implements FileHandler {
 
         String subDir =  path + FileConst.DELIMITER;
 
-        String key = SquirrelUtils.randomUUIDWithoutDash();
+        String key = BottleFileUtils.randomUUIDWithoutDash();
 
 
         //文件名称
@@ -118,28 +120,26 @@ public class LocalFileHandler implements FileHandler {
         Assert.hasText(key, "文件路径不能为空");
         Path path = Paths.get(workDir, key);
         try {
-            Files.delete(path);
-        } catch (IOException e) {
+            if (path.toFile().isDirectory()){
+                delFile(path.toFile());
+            } else {
+                Files.delete(path);
+            }
+        } catch (Exception e) {
             throw new FileOperationException("附件 " + key + " 删除失败", e);
         }
-
     }
 
-    @Override
-    public String getPrefix(String fileName) {
-        int suffixFirstIndex = fileName.lastIndexOf(".");
-        if (suffixFirstIndex == -1){
-            return StringUtils.EMPTY;
+    private boolean delFile(File file){
+        /*if (!file.exists()) {
+            return false;
+        }*/
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            for (File f : files) {
+                delFile(f);
+            }
         }
-        return fileName.substring(0, suffixFirstIndex);
-    }
-
-    @Override
-    public String getSuffix(String fileName) {
-        int suffixFirstIndex = fileName.lastIndexOf(".");
-        if (suffixFirstIndex == -1){
-            return StringUtils.EMPTY;
-        }
-        return fileName.substring(suffixFirstIndex + 1);
+        return file.delete();
     }
 }

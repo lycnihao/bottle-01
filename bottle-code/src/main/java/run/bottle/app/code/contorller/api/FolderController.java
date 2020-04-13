@@ -1,5 +1,8 @@
 package run.bottle.app.code.contorller.api;
 
+import static run.bottle.app.upload.utils.BottleFileUtils.getPrefixBySlash;
+
+import java.io.File;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +60,7 @@ public class FolderController {
     List<FolderAttachment> folderAttachments = folderAttachmentService.getByFolderId(folder.getId());
     Set<Integer> attAIds = folderAttachments.stream().map(FolderAttachment::getAttachmentId).collect(Collectors.toSet());
     List<Attachment> attachments = attachmentService.listAllByIds(attAIds);
-    Map<String,Object> resultMap = new HashMap<>();
+    Map<String,Object> resultMap = new HashMap<>(2);
     resultMap.put("folderSub",convertToDtoList(folderDTOSub,attachments,folder));
     resultMap.put("parent",folder.getPid() == 0 ? null : folderService.getById(folder.getPid()).getPath());
     return BaseResponse.ok(resultMap);
@@ -98,7 +101,7 @@ public class FolderController {
   private BaseResponse delete(@RequestParam(value = "key") String key,
       @RequestParam(value = "isFolder", defaultValue = "true") Boolean isFolder){
     if (isFolder) {
-      folderService.removeById(Integer.valueOf(key));
+      folderService.removePermanently(key);
     } else {
       attachmentService.removePermanently(key);
     }
@@ -107,11 +110,14 @@ public class FolderController {
 
   @PostMapping("upload")
   public Attachment uploadAttachment(@RequestPart("file") MultipartFile file, @RequestParam(defaultValue = "root") String path){
-    Folder folder = folderService.getByPath(path);
-    Attachment attachment = attachmentService.upload(file,path);
     FolderAttachment folderAttachment = new FolderAttachment();
-    folderAttachment.setAttachmentId(attachment.getId());
+
+    Folder folder = folderService.getByPath(path);
     folderAttachment.setFolderId(folder.getId());
+
+    Attachment attachment = attachmentService.upload(file, path);
+    folderAttachment.setAttachmentId(attachment.getId());
+
     folderAttachmentService.create(folderAttachment);
     return attachment;
   }
@@ -122,10 +128,11 @@ public class FolderController {
       folderOrFileDTO.setId(attachment.getId());
       folderOrFileDTO.setKey(attachment.getFileKey());
       folderOrFileDTO.setName(attachment.getName());
-      folderOrFileDTO.setPath(BottleConst.Squirrel_PATH + BottleConst.DELIMITER + attachment.getPath());
+      folderOrFileDTO.setPath(BottleConst.BOTTLE_PATH + BottleConst.DELIMITER + attachment.getPath());
       folderOrFileDTO.setMediaType(attachment.getMediaType());
       folderOrFileDTO.setIsFolder(false);
       folderOrFileDTO.setParent(folder.getPid());
+      folderOrFileDTO.setSize(attachment.getSize());
       folderOrFileDTOS.add(folderOrFileDTO);
     });
     return folderOrFileDTOS;

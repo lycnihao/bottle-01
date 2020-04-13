@@ -30,8 +30,4 @@ public interface FileHandler {
      * @param path 文件路径
      */
     void delete(String path);
-
-    String getPrefix(String fileName);
-
-    String getSuffix(String fileName);
 }

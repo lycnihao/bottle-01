@@ -1,5 +1,7 @@
 package run.bottle.app.code.service.impl;
 
+import static run.bottle.app.code.model.support.BottleConst.DELIMITER;
+
 import run.bottle.app.code.model.dto.FolderOrFileDTO;
 import run.bottle.app.code.model.entity.Folder;
 import run.bottle.app.code.repository.FolderRepository;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import run.bottle.app.upload.FileHandler;
+import run.bottle.app.upload.model.FileConst;
 
 /**
  * 文件夹(和文件)逻辑处理层
@@ -21,10 +25,13 @@ public class FolderServiceImpl extends AbstractCrudService<Folder, Integer> impl
 
 
   private final FolderRepository folderRepository;
+  private final FileHandler fileHandler;
 
-  protected FolderServiceImpl(FolderRepository folderRepository) {
+  protected FolderServiceImpl(FolderRepository folderRepository,
+      FileHandler fileHandler) {
     super(folderRepository);
     this.folderRepository = folderRepository;
+    this.fileHandler = fileHandler;
   }
 
   @Override
@@ -65,6 +72,14 @@ public class FolderServiceImpl extends AbstractCrudService<Folder, Integer> impl
     folder.setPath(path.substring(0, path.lastIndexOf(folder.getName())) + name);
     folder.setName(name);
     super.update(folder);
+    return folder;
+  }
+
+  @Override
+  public Folder removePermanently(String key) {
+    Folder folder = getById(Integer.valueOf(key));
+    remove(folder);
+    fileHandler.delete("upload" + DELIMITER + folder.getPath());
     return folder;
   }
 

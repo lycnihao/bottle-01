@@ -31,4 +31,6 @@ public interface FolderService extends CrudService<Folder, Integer> {
   List<FolderOrFileDTO> convertToDto (List<Folder> folders);
 
   Folder rename(String name,String key);
+
+  Folder removePermanently(String key);
 }

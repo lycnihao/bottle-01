@@ -13,18 +13,18 @@ public class SecurityUtils {
     /**
      * Access token cache prefix.
      */
-    private final static String TOKEN_ACCESS_CACHE_PREFIX = "squirrel.admin.access.token.";
+    private final static String TOKEN_ACCESS_CACHE_PREFIX = "bottle.admin.access.token.";
 
     /**
      * Refresh token cache prefix.
      */
-    private final static String TOKEN_REFRESH_CACHE_PREFIX = "squirrel.admin.refresh.token.";
+    private final static String TOKEN_REFRESH_CACHE_PREFIX = "bottle.admin.refresh.token.";
 
-    private final static String ACCESS_TOKEN_CACHE_PREFIX = "squirrel.admin.access_token.";
+    private final static String ACCESS_TOKEN_CACHE_PREFIX = "bottle.admin.access_token.";
 
-    private final static String REFRESH_TOKEN_CACHE_PREFIX = "squirrel.admin.refresh_token.";
+    private final static String REFRESH_TOKEN_CACHE_PREFIX = "bottle.admin.refresh_token.";
 
-    private final static String TEMP_TOKEN_CACHE_PREFIX = "squirrel.temp.token.";
+    private final static String TEMP_TOKEN_CACHE_PREFIX = "bottle.temp.token.";
 
 
     private SecurityUtils() {
