@@ -2,6 +2,7 @@ package run.bottle.app.code.service.impl;
 
 import static run.bottle.app.code.model.support.BottleConst.DELIMITER;
 
+import run.bottle.app.code.model.dto.FolderNode;
 import run.bottle.app.code.model.dto.FolderOrFileDTO;
 import run.bottle.app.code.model.entity.Folder;
 import run.bottle.app.code.repository.FolderRepository;
@@ -83,5 +84,26 @@ public class FolderServiceImpl extends AbstractCrudService<Folder, Integer> impl
     return folder;
   }
 
+  @Override
+  public List<FolderNode> getFolderNode() {
+    List<Folder> list = listAll();
+    return convertToNode(list,0);
+  }
+
+  private List<FolderNode>  convertToNode(List<Folder> list,int pid){
+    List<FolderNode> children = new ArrayList<>();
+    for (Folder folder : list) {
+      if (folder.getPid() == pid){
+        FolderNode folderNode = new FolderNode();
+        folderNode.setKey(folder.getId().toString());
+        folderNode.setName(folder.getName());
+        /*folderNode.setPath(folder.getPath());*/
+        folderNode.setDisabled(pid == 0 ? true : false);
+        folderNode.setChild(convertToNode(list,folder.getId()));
+        children.add(folderNode);
+      }
+    }
+    return children;
+  }
 
 }

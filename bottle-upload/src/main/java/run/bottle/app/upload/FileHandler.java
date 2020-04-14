@@ -20,8 +20,8 @@ public interface FileHandler {
 
     /**
      * 移动文件
-     * @param path 移动路径
-     * @param newPath 移动路径
+     * @param path 原路径
+     * @param newPath 目标路径
      */
     UploadResult moveToPath(String path,String newPath);
 
@@ -30,4 +30,11 @@ public interface FileHandler {
      * @param path 文件路径
      */
     void delete(String path);
+
+    /**
+     * 文件复制
+     * @param oldPath 原路径
+     * @param newPath 目标路径
+     */
+    void copyFile(String oldPath,String newPath);
 }

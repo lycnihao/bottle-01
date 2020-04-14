@@ -85,6 +85,12 @@ public class LocalFileHandler implements FileHandler {
         }
     }
 
+    /**
+     * 文件移动
+     * @param path 原路径
+     * @param newPath 目标路径
+     * @return
+     */
     @Override
     public UploadResult moveToPath(String path, String newPath) {
         String subDir = UPLOAD_DIR + newPath;
@@ -107,7 +113,7 @@ public class LocalFileHandler implements FileHandler {
                    System.out.println("File is moved successful!");
                    return uploadResult;
                } else {
-                   System.out.println("File is failed to move !");
+                   System.out.println("重命名失败！新文件名已存在");
                }
            } catch (IOException e){
                e.printStackTrace();
@@ -115,29 +121,50 @@ public class LocalFileHandler implements FileHandler {
         return null;
     }
 
+    /**
+     * 删除文件
+     * @param path 文件路径
+     */
     @Override
-    public void delete(String key) {
-        Assert.hasText(key, "文件路径不能为空");
-        Path path = Paths.get(workDir, key);
+    public void delete(String path) {
+        Assert.hasText(path, "文件路径不能为空");
+        Path destinationPath = Paths.get(workDir, path);
         try {
-            if (path.toFile().isDirectory()){
-                delFile(path.toFile());
+            if (destinationPath.toFile().isDirectory()){
+                deleteDirectory(destinationPath.toFile());
             } else {
-                Files.delete(path);
+                Files.delete(destinationPath);
             }
         } catch (Exception e) {
-            throw new FileOperationException("附件 " + key + " 删除失败", e);
+            throw new FileOperationException("附件 " + path + " 删除失败", e);
         }
     }
 
-    private boolean delFile(File file){
+    /**
+     *  复制
+     * @param oldPath 原路径
+     * @param newPath 目标路径
+     */
+    @Override
+    public void copyFile(String oldPath, String newPath) {
+        Path sourcePath = Paths.get(oldPath);
+        Path destinationPath = Paths.get(newPath);
+        try {
+            Files.copy(sourcePath, destinationPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 递归删除文件夹下所有文件
+    private boolean deleteDirectory(File file){
         /*if (!file.exists()) {
             return false;
         }*/
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             for (File f : files) {
-                delFile(f);
+                deleteDirectory(f);
             }
         }
         return file.delete();

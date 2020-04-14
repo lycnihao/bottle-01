@@ -11,7 +11,7 @@ public interface AttachmentService extends CrudService<Attachment, Integer> {
 
   Attachment upload(MultipartFile file,String path);
 
-  UploadResult move(String path, String newPath);
+  UploadResult rename(String path, String newPath);
 
   Attachment removePermanently(String  key);
 

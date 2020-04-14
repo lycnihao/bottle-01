@@ -47,7 +47,7 @@ public class AttachmentServiceImpl extends AbstractCrudService<Attachment, Integ
   }
 
   @Override
-  public UploadResult move(String path, String newPath) {
+  public UploadResult rename(String path, String newPath) {
     return fileHandler.moveToPath(path,newPath);
   }
 

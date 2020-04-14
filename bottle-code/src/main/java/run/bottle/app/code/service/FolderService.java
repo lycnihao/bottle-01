@@ -1,5 +1,6 @@
 package run.bottle.app.code.service;
 
+import run.bottle.app.code.model.dto.FolderNode;
 import run.bottle.app.code.model.dto.FolderOrFileDTO;
 import run.bottle.app.code.model.entity.Folder;
 import run.bottle.app.code.service.base.CrudService;
@@ -7,6 +8,8 @@ import run.bottle.app.code.service.base.CrudService;
 import java.util.List;
 
 public interface FolderService extends CrudService<Folder, Integer> {
+
+
 
   /**
    *  获取子目录
@@ -33,4 +36,6 @@ public interface FolderService extends CrudService<Folder, Integer> {
   Folder rename(String name,String key);
 
   Folder removePermanently(String key);
+
+  List<FolderNode>  getFolderNode();
 }

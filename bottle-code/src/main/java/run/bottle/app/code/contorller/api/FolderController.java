@@ -1,13 +1,11 @@
 package run.bottle.app.code.contorller.api;
 
-import static run.bottle.app.upload.utils.BottleFileUtils.getPrefixBySlash;
-
-import java.io.File;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import run.bottle.app.code.exception.NotFoundException;
+import run.bottle.app.code.model.dto.FolderNode;
 import run.bottle.app.code.model.dto.FolderOrFileDTO;
 import run.bottle.app.code.model.entity.Attachment;
 import run.bottle.app.code.model.entity.Folder;
@@ -48,6 +46,11 @@ public class FolderController {
     this.folderAttachmentService = folderAttachmentService;
   }
 
+  @GetMapping("getFolderNode")
+  private List<FolderNode> getFolderNode(){
+    return folderService.getFolderNode();
+  }
+
   @GetMapping
   private BaseResponse getFolder(@RequestParam(defaultValue = "root") String path){
     System.out.println(path);
@@ -84,7 +87,7 @@ public class FolderController {
       } else {
         String newPath = path + BottleConst.DELIMITER + name;
         Attachment attachment = attachmentService.getByKey(key);
-        UploadResult uploadResult = attachmentService.move(attachment.getPath(),newPath);
+        UploadResult uploadResult = attachmentService.rename(attachment.getPath(),newPath);
         if (uploadResult != null){
           attachment.setName(name);
           attachment.setPath(uploadResult.getFilePath());
@@ -96,6 +99,27 @@ public class FolderController {
 
     return BaseResponse.ok("");
   }
+
+  @PutMapping("moveto")
+  private BaseResponse moveTo(
+          @RequestParam(value = "path") String path,
+          @RequestParam(value = "key", defaultValue = "") String key,
+          @RequestParam(value = "isFolder", defaultValue = "true") Boolean isFolder){
+    if (isFolder) {
+      /*folderService.rename("",key);*/
+    } else {
+      Attachment attachment = attachmentService.getByKey(key);
+      String newPath = path + BottleConst.DELIMITER + attachment.getName();
+      UploadResult uploadResult = attachmentService.rename(attachment.getPath(),newPath);
+      if (uploadResult != null){
+        attachment.setPath(uploadResult.getFilePath());
+        attachmentService.update(attachment);
+      }
+    }
+
+    return BaseResponse.ok("");
+  }
+
 
   @DeleteMapping
   private BaseResponse delete(@RequestParam(value = "key") String key,
