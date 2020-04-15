@@ -9,4 +9,5 @@ import java.util.List;
 public interface FolderAttachmentRepository extends BaseRepository<FolderAttachment, Integer>,
         JpaSpecificationExecutor<FolderAttachment> {
     List<FolderAttachment> getByFolderId(Integer folderId);
+    FolderAttachment getByAttachmentId(Integer attachmentId);
 }

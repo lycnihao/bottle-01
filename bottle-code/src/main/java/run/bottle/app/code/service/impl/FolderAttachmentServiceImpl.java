@@ -27,4 +27,9 @@ public class FolderAttachmentServiceImpl extends AbstractCrudService<FolderAttac
     public List<FolderAttachment> getByFolderId(Integer folderId) {
         return folderAttachmentRepository.getByFolderId(folderId);
     }
+
+    @Override
+    public FolderAttachment getByAttachmentId(Integer attachmentId) {
+        return folderAttachmentRepository.getByAttachmentId(attachmentId);
+    }
 }

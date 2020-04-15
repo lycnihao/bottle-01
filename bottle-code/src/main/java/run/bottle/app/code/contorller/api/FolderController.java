@@ -15,6 +15,7 @@ import run.bottle.app.code.model.support.BottleConst;
 import run.bottle.app.code.service.AttachmentService;
 import run.bottle.app.code.service.FolderAttachmentService;
 import run.bottle.app.code.service.FolderService;
+import run.bottle.app.upload.model.FileConst;
 import run.bottle.app.upload.model.UploadResult;
 
 import java.util.HashMap;
@@ -100,22 +101,32 @@ public class FolderController {
     return BaseResponse.ok("");
   }
 
-  @PutMapping("moveto")
+  @PostMapping("moveto")
   private BaseResponse moveTo(
-          @RequestParam(value = "path") String path,
-          @RequestParam(value = "key", defaultValue = "") String key,
-          @RequestParam(value = "isFolder", defaultValue = "true") Boolean isFolder){
-    if (isFolder) {
-      /*folderService.rename("",key);*/
-    } else {
+          @RequestParam(value = "parentKey") String parentKey,
+          @RequestParam(value = "keys") String keys){
+    Folder parentFolder = folderService.getById(Integer.valueOf(parentKey));
+    for (String key : keys.split(",")) {
       Attachment attachment = attachmentService.getByKey(key);
-      String newPath = path + BottleConst.DELIMITER + attachment.getName();
-      UploadResult uploadResult = attachmentService.rename(attachment.getPath(),newPath);
-      if (uploadResult != null){
-        attachment.setPath(uploadResult.getFilePath());
-        attachmentService.update(attachment);
+      if (attachment == null){
+        Folder folder = folderService.getById(Integer.valueOf(key));
+        folder.setPid(parentFolder.getId());
+        folder.setPath(parentFolder.getPath() + FileConst.DELIMITER + folder.getName());
+        folderService.update(folder);
+      } else {
+        FolderAttachment folderAttachment = folderAttachmentService.getByAttachmentId(attachment.getId());
+        folderAttachment.setFolderId(parentFolder.getId());
+        folderAttachmentService.update(folderAttachment);
       }
     }
+
+    /*
+    String newPath = path + BottleConst.DELIMITER + attachment.getName();
+    UploadResult uploadResult = attachmentService.rename(attachment.getPath(),newPath);
+    if (uploadResult != null){
+      attachment.setPath(uploadResult.getFilePath());
+      attachmentService.update(attachment);
+    }*/
 
     return BaseResponse.ok("");
   }

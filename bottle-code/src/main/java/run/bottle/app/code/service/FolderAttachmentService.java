@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface FolderAttachmentService extends CrudService<FolderAttachment, Integer> {
     List<FolderAttachment> getByFolderId(Integer folderId);
+    FolderAttachment getByAttachmentId(Integer attachmentId);
 }

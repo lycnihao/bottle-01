@@ -97,8 +97,7 @@ public class FolderServiceImpl extends AbstractCrudService<Folder, Integer> impl
         FolderNode folderNode = new FolderNode();
         folderNode.setKey(folder.getId().toString());
         folderNode.setName(folder.getName());
-        /*folderNode.setPath(folder.getPath());*/
-        folderNode.setDisabled(pid == 0 ? true : false);
+        folderNode.setDisabled(false);
         folderNode.setChild(convertToNode(list,folder.getId()));
         children.add(folderNode);
       }
