@@ -147,25 +147,23 @@ public class FolderController {
     for (String key : keys.split(",")) {
       Attachment attachment = attachmentService.getByKey(key);
       if (attachment == null){
-
-        List<Folder> childFolder = folderService.getByParentId(parentFolder.getId());
+        List<Folder> childFolders = folderService.getByParentId(parentFolder.getId());
         Folder folder = folderService.getById(Integer.valueOf(key));
-        childFolder.forEach(child -> {
+        childFolders.forEach(child -> {
           if (child.getName().equals(folder.getName())){
             throw new ServiceException("文件夹名称冲突");
           }
         });
-        Folder newFolder = null;
-        try {
-          newFolder = (Folder) folder.clone();
-        } catch (CloneNotSupportedException e) {
-          e.printStackTrace();
-        }
+        List<FolderNode> childAll = folderService.getFolderNodeByPid(folder.getId());
+        String oldPath = folder.getPath();
+        Folder newFolder = new Folder();
         newFolder.setId(null);
+        newFolder.setName(folder.getName());
         newFolder.setPid(parentFolder.getId());
         newFolder.setPath(parentFolder.getPath() + FileConst.DELIMITER + folder.getName());
-        /*folderService.update(newFolder);*/
-        System.out.println(newFolder);
+        folderService.create(newFolder);
+        newFolder.setPath(parentFolder.getPath());
+        folderService.copyFolder(childAll,newFolder, oldPath);
       } else {
         String sourcePath = attachment.getPath();
         String targetPath = parentFolder.getPath() +  FileConst.DELIMITER + attachment.getName();

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.lang.NonNull;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,6 +45,7 @@ public interface BaseRepository<DOMAIN, ID> extends JpaRepository<DOMAIN, ID> {
      * @param ids 主键集合
      * @return 受影响行数
      */
+    @Transactional
     long deleteByIdIn(@NonNull Collection<ID> ids);
 
 }

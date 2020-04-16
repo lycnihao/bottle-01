@@ -14,6 +14,7 @@ import java.util.List;
 public class FolderNode {
     private String key;
     private String name;
+    private String path;
     private Boolean disabled;
     private List<FolderNode> child;
 }

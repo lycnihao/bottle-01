@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface FolderService extends CrudService<Folder, Integer> {
 
-
-
   /**
    *  获取子目录
    * @param parentId 父目录id
@@ -38,4 +36,8 @@ public interface FolderService extends CrudService<Folder, Integer> {
   Folder removePermanently(String key);
 
   List<FolderNode>  getFolderNode();
+
+  List<FolderNode>  getFolderNodeByPid(Integer pid);
+
+  void copyFolder(List<FolderNode> childAll,Folder folder,String oldPath);
 }

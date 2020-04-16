@@ -37,4 +37,10 @@ public interface FileHandler {
      * @param path 文件路径
      */
     void delete(String path);
+
+    /**
+     * 创建文件夹
+     * @param path 文件夹路径
+     */
+    void createDirectories(String path);
 }

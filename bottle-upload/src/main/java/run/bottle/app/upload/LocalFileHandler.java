@@ -169,6 +169,18 @@ public class LocalFileHandler implements FileHandler {
         }
     }
 
+    @Override
+    public void createDirectories(String path) {
+        Path targetPath = Paths.get(workDir,UPLOAD_DIR,FileConst.DELIMITER,path);
+        if (!Files.exists(targetPath)){
+            try {
+                Files.createDirectories(targetPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     // 递归删除文件夹下所有文件
     private boolean deleteDirectory(File file){
         /*if (!file.exists()) {

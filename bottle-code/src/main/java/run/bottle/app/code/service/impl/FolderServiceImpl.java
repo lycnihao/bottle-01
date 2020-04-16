@@ -10,8 +10,15 @@ import run.bottle.app.code.service.FolderService;
 import run.bottle.app.code.service.base.AbstractCrudService;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import run.bottle.app.upload.FileHandler;
 import run.bottle.app.upload.model.FileConst;
 
@@ -33,6 +40,12 @@ public class FolderServiceImpl extends AbstractCrudService<Folder, Integer> impl
     super(folderRepository);
     this.folderRepository = folderRepository;
     this.fileHandler = fileHandler;
+  }
+
+  @Override
+  public Folder create(Folder folder){
+    fileHandler.createDirectories(folder.getPath());
+    return super.create(folder);
   }
 
   @Override
@@ -72,6 +85,7 @@ public class FolderServiceImpl extends AbstractCrudService<Folder, Integer> impl
     String path = folder.getPath();
     folder.setPath(path.substring(0, path.lastIndexOf(folder.getName())) + name);
     folder.setName(name);
+    fileHandler.createDirectories(folder.getPath());
     super.update(folder);
     return folder;
   }
@@ -79,15 +93,37 @@ public class FolderServiceImpl extends AbstractCrudService<Folder, Integer> impl
   @Override
   public Folder removePermanently(String key) {
     Folder folder = getById(Integer.valueOf(key));
-    remove(folder);
+    List<FolderNode> folderNodes = nodeConvertToList(getFolderNodeByPid(folder.getId()));
+    Set<Integer> ids = folderNodes.stream().map(folderNode -> Integer.parseInt(folderNode.getKey())).collect(Collectors.toSet());
+    ids.add(folder.getId());
+    removeInBatch(ids);
     fileHandler.delete("upload" + DELIMITER + folder.getPath());
     return folder;
   }
 
   @Override
   public List<FolderNode> getFolderNode() {
+    return getFolderNodeByPid(0);
+  }
+
+  @Override
+  public List<FolderNode> getFolderNodeByPid(Integer pid) {
     List<Folder> list = listAll();
-    return convertToNode(list,0);
+    return convertToNode(list,pid);
+  }
+
+  @Override
+  public void copyFolder(List<FolderNode> childAll,Folder folder,String oldPath) {
+    childAll.forEach(folderNode -> {
+      /*String childPath = folderNode.getPath().split(oldPath)[1];*/
+      Folder childFolder = new Folder();
+      childFolder.setName(folderNode.getName());
+      childFolder.setPid(folder.getId());
+      childFolder.setPath(folder.getPath() +FileConst.DELIMITER + folder.getName() + FileConst.DELIMITER + folderNode.getName());
+      create(childFolder);
+     fileHandler.createDirectories(childFolder.getPath());
+      copyFolder(folderNode.getChild(), childFolder, oldPath);
+    });
   }
 
   private List<FolderNode>  convertToNode(List<Folder> list,int pid){
@@ -98,10 +134,20 @@ public class FolderServiceImpl extends AbstractCrudService<Folder, Integer> impl
         folderNode.setKey(folder.getId().toString());
         folderNode.setName(folder.getName());
         folderNode.setDisabled(false);
+        folderNode.setPath(folder.getPath());
         folderNode.setChild(convertToNode(list,folder.getId()));
         children.add(folderNode);
       }
     }
+    return children;
+  }
+
+  private List<FolderNode>  nodeConvertToList(List<FolderNode> list){
+    List<FolderNode> children = new ArrayList<>();
+    for (FolderNode folder : list) {
+        children.add(folder);
+        children.addAll(nodeConvertToList(folder.getChild()));
+      }
     return children;
   }
 
