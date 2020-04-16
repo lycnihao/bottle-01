@@ -5,6 +5,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import run.bottle.app.code.exception.NotFoundException;
+import run.bottle.app.code.exception.ServiceException;
 import run.bottle.app.code.model.dto.FolderNode;
 import run.bottle.app.code.model.dto.FolderOrFileDTO;
 import run.bottle.app.code.model.entity.Attachment;
@@ -109,7 +110,14 @@ public class FolderController {
     for (String key : keys.split(",")) {
       Attachment attachment = attachmentService.getByKey(key);
       if (attachment == null){
+
+        List<Folder> childFolder = folderService.getByParentId(parentFolder.getId());
         Folder folder = folderService.getById(Integer.valueOf(key));
+        childFolder.forEach(child -> {
+          if (child.getName().equals(folder.getName())){
+            throw new ServiceException("文件夹名称冲突");
+          }
+        });
         folder.setPid(parentFolder.getId());
         folder.setPath(parentFolder.getPath() + FileConst.DELIMITER + folder.getName());
         folderService.update(folder);
@@ -117,6 +125,56 @@ public class FolderController {
         FolderAttachment folderAttachment = folderAttachmentService.getByAttachmentId(attachment.getId());
         folderAttachment.setFolderId(parentFolder.getId());
         folderAttachmentService.update(folderAttachment);
+      }
+    }
+
+    /*
+    String newPath = path + BottleConst.DELIMITER + attachment.getName();
+    UploadResult uploadResult = attachmentService.rename(attachment.getPath(),newPath);
+    if (uploadResult != null){
+      attachment.setPath(uploadResult.getFilePath());
+      attachmentService.update(attachment);
+    }*/
+
+    return BaseResponse.ok("");
+  }
+
+  @PostMapping("copyto")
+  private BaseResponse copyTo(
+      @RequestParam(value = "parentKey") String parentKey,
+      @RequestParam(value = "keys") String keys){
+    Folder parentFolder = folderService.getById(Integer.valueOf(parentKey));
+    for (String key : keys.split(",")) {
+      Attachment attachment = attachmentService.getByKey(key);
+      if (attachment == null){
+
+        List<Folder> childFolder = folderService.getByParentId(parentFolder.getId());
+        Folder folder = folderService.getById(Integer.valueOf(key));
+        childFolder.forEach(child -> {
+          if (child.getName().equals(folder.getName())){
+            throw new ServiceException("文件夹名称冲突");
+          }
+        });
+        Folder newFolder = null;
+        try {
+          newFolder = (Folder) folder.clone();
+        } catch (CloneNotSupportedException e) {
+          e.printStackTrace();
+        }
+        newFolder.setId(null);
+        newFolder.setPid(parentFolder.getId());
+        newFolder.setPath(parentFolder.getPath() + FileConst.DELIMITER + folder.getName());
+        /*folderService.update(newFolder);*/
+        System.out.println(newFolder);
+      } else {
+        String sourcePath = attachment.getPath();
+        String targetPath = parentFolder.getPath() +  FileConst.DELIMITER + attachment.getName();
+        UploadResult uploadResult = attachmentService.copy(sourcePath,targetPath);
+        Attachment target = attachmentService.create(attachmentService.convertToBean(uploadResult));
+        FolderAttachment folderAttachment = new FolderAttachment();
+        folderAttachment.setFolderId(parentFolder.getId());
+        folderAttachment.setAttachmentId(target.getId());
+        folderAttachmentService.create(folderAttachment);
       }
     }
 

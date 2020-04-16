@@ -26,15 +26,15 @@ public interface FileHandler {
     UploadResult moveToPath(String path,String newPath);
 
     /**
+     * 复制文件
+     * @param path 原路径
+     * @param targetPath 目标路径
+     */
+    UploadResult copyFile(String path,String targetPath);
+
+    /**
      * 删除文件
      * @param path 文件路径
      */
     void delete(String path);
-
-    /**
-     * 文件复制
-     * @param oldPath 原路径
-     * @param newPath 目标路径
-     */
-    void copyFile(String oldPath,String newPath);
 }

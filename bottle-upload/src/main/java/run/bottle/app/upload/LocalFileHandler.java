@@ -3,6 +3,9 @@ package run.bottle.app.upload;
 import static run.bottle.app.upload.utils.BottleFileUtils.getPrefix;
 import static run.bottle.app.upload.utils.BottleFileUtils.getSuffix;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.nio.file.StandardCopyOption;
 import run.bottle.app.upload.exception.FileOperationException;
 import run.bottle.app.upload.exception.ServiceException;
 import run.bottle.app.upload.model.UploadResult;
@@ -121,6 +124,32 @@ public class LocalFileHandler implements FileHandler {
         return null;
     }
 
+    @Override
+    public UploadResult copyFile(String source, String target) {
+        try {
+            File file = new File(workDir + source);
+            Path sourcePath = Paths.get(workDir + source);
+            Path targetPath = Paths.get(workDir + UPLOAD_DIR + target);
+            System.out.println(sourcePath.toString());
+            System.out.println(targetPath.toString());
+
+            Files.copy(sourcePath,targetPath);
+
+            UploadResult uploadResult = new UploadResult();
+            uploadResult.setFilename(file.getName());
+            uploadResult.setFilePath(UPLOAD_DIR + target);
+            uploadResult.setSuffix(getSuffix(file.getName()));
+            uploadResult.setMediaType(MediaType.valueOf(Files.probeContentType(Paths.get(sourcePath.toString()))));
+            uploadResult.setSize(file.length());
+            System.out.println(uploadResult);
+            return uploadResult;
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * 删除文件
      * @param path 文件路径
@@ -137,22 +166,6 @@ public class LocalFileHandler implements FileHandler {
             }
         } catch (Exception e) {
             throw new FileOperationException("附件 " + path + " 删除失败", e);
-        }
-    }
-
-    /**
-     *  复制
-     * @param oldPath 原路径
-     * @param newPath 目标路径
-     */
-    @Override
-    public void copyFile(String oldPath, String newPath) {
-        Path sourcePath = Paths.get(oldPath);
-        Path destinationPath = Paths.get(newPath);
-        try {
-            Files.copy(sourcePath, destinationPath);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

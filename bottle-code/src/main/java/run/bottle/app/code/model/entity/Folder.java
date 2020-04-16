@@ -45,4 +45,9 @@ public class Folder extends BaseEntity{
   protected void prePersist() {
     super.prePersist();
   }
+
+  @Override
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
+  }
 }

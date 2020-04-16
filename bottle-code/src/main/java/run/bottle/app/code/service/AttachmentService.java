@@ -13,6 +13,8 @@ public interface AttachmentService extends CrudService<Attachment, Integer> {
 
   UploadResult rename(String path, String newPath);
 
+  UploadResult copy(String path, String targetPath);
+
   Attachment removePermanently(String  key);
 
   Attachment convertToBean(UploadResult uploadResult);

@@ -52,6 +52,11 @@ public class AttachmentServiceImpl extends AbstractCrudService<Attachment, Integ
   }
 
   @Override
+  public UploadResult copy(String path, String targetPath) {
+    return fileHandler.copyFile(path, targetPath);
+  }
+
+  @Override
   public Attachment removePermanently(String  key) {
     Attachment deletedAttachment = attachmentRepository.getByFileKey(key);
     remove(deletedAttachment);
